@@ -23,6 +23,10 @@ int aggressiveModeStatus = 0;
 int aggressiveModePin = 5;
 int mildModePin = 6;
 
+//Variable for brakeLight
+int brakeLightStatus = 0;
+int brakeLightPin = 2;
+
 void setup() 
 {
 
@@ -39,6 +43,12 @@ void setup()
   digitalWrite(relay1Pin, HIGH);
   digitalWrite(relay2Pin, HIGH);
   digitalWrite(motorRelayPin, HIGH);//Relays are Active Low
+
+  //Setting pin of Brake light
+  pinMode(brakeLightPin, OUTPUT);
+
+  //Turning the brake LightRelay OFF
+  digitalWrite(brakeLightPin, HIGH);
 }
 
 void loop()
@@ -51,6 +61,7 @@ void loop()
     digitalWrite(relay1Pin, HIGH);
     digitalWrite(relay2Pin, HIGH); //Disabling Regen while accelrating
     digitalWrite(motorRelayPin, !presentState);//relay is active LOW
+    digitalWrite(brakeLightPin,  HIGH);
     Serial.println("Vehicle Accelerating...");
     previousState = presentState;
   }
@@ -70,6 +81,13 @@ void loop()
 
     digitalWrite(relay1Pin, !mildModeStatus);
     digitalWrite(relay2Pin, !aggressiveModeStatus);
+
+  
+    brakeLightStatus = aggressiveModeStatus? LOW:HIGH;
+    digitalWrite(brakeLightPin,  brakeLightStatus);
+    // delay(2000);
+    // digitalWrite(brakeLightPin,  HIGH);
+    // delay(2000);
 
 
   }
